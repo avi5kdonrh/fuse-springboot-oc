@@ -7,7 +7,7 @@
         <route id="test" streamCache="true">
             <from uri="jms:queue:TEST"/>
             <transacted/>
-            <to uri="log:test?showBody=true"/>
+            <to uri="log:test1?showBody=true"/>
         </route>
 
 
