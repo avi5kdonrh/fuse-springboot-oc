@@ -4,7 +4,6 @@
     <!-- Camel Routes -->
 
     <camelContext id="camel" xmlns="http://camel.apache.org/schema/spring">
-    <propertyPlaceholder />
         <route id="test" streamCache="true">
             <from uri="jms:queue:TEST?concurrentConsumers={{concurrent.consumers}}"/>
             <transacted/>
