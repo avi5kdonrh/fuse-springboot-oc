@@ -31,7 +31,7 @@
           init-method="start" destroy-method="stop" primary="true">
         <property name="maxConnections" value="${amq.broker.cfPoolSize}"/>
         <property name="connectionFactory" ref="fuse-amqjms-cf"/>
-        <property name="idleTimeout" value="0"/>
+        <!--<property name="idleTimeout" value="0"/>-->
     </bean>
 
     <bean id="transaction-manager" class="org.springframework.jms.connection.JmsTransactionManager">
