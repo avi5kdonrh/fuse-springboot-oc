@@ -5,43 +5,13 @@
 
     <camelContext id="camel" xmlns="http://camel.apache.org/schema/spring">
         <route id="test" streamCache="true">
-            <from uri="jms:queue:TEST?concurrentConsumers={{concurrent.consumers}}"/>
-            <transacted/>
+            <from uri="undertow:http://0.0.0.0:8089/test"/>
             <to uri="log:test1?showBody=true"/>
         </route>
 
 
     </camelContext>
 
-    <bean id="fuse-amqjms-cf" class="org.apache.activemq.ActiveMQConnectionFactory">
-        <property name="brokerURL" value="${amq.broker.url}"/>
-        <property name="userName" value="${amq.broker.username}"/>
-        <property name="password" value="${amq.broker.password}"/>
-        <!--<property name="redeliveryPolicyMap" ref="fuseAmqRedeliveryPolicy"/>-->
-        <!-- ACK to the BROKER when a message is picked up, NOT and Txn Commit -->
-        <property name="transactedIndividualAck" value="true"/>
-        <!-- There is a reported defect taht A-MQ sends Async by default - even in a Txn.
-             This is set as a work around to force Sync Sends
-             https://issues.apache.org/jira/browse/CAMEL-4616 -->
-        <property name="alwaysSyncSend" value="true"/>
-    </bean>
 
-
-    <bean id="fuse-amqjms-cf-tx" class="org.apache.activemq.jms.pool.PooledConnectionFactory"
-          init-method="start" destroy-method="stop" primary="true">
-        <property name="maxConnections" value="${amq.broker.cfPoolSize}"/>
-        <property name="connectionFactory" ref="fuse-amqjms-cf"/>
-       <property name="idleTimeout" value="${idle.timeout}"/>
-    </bean>
-
-    <bean id="transaction-manager" class="org.springframework.jms.connection.JmsTransactionManager">
-        <property name="connectionFactory" ref="fuse-amqjms-cf-tx"/>
-    </bean>
-
-    <bean id="jms" class="org.apache.camel.component.jms.JmsComponent">
-        <property name="connectionFactory" ref="fuse-amqjms-cf-tx"/>
-        <property name="transacted" value="true"/>
-        <property name="transactionManager" ref="transaction-manager"/>
-    </bean>
 
 </beans>
